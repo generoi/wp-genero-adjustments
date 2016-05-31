@@ -316,10 +316,17 @@ class Adjustments {
 
     // Set some optinally sitewide-defined options.
     foreach (array(
+      'mailer' => 'GENERO_MAILER',
       'mailserver_url' => 'GENERO_MAILSERVER_URL',
       'mailserver_login' => 'GENERO_MAILSERVER_LOGIN',
       'mailserver_pass' => 'GENERO_MAILSERVER_PASS',
       'mailserver_port' => 'GENERO_MAILSERVER_PORT',
+      'smtp_host' => 'GENERO_SMTP_HOST',
+      'smtp_user' => 'GENERO_SMTP_USER',
+      'smtp_auth' => 'GENERO_SMTP_AUTH',
+      'smtp_ssl' => 'GENERO_SMTP_SSL',
+      'smtp_pass' => 'GENERO_SMTP_PASS',
+      'smtp_port' => 'GENERO_SMTP_PORT',
     ) as $option => $constant) {
       if (defined($constant)) {
         update_option($option, constant($constant));
