@@ -204,8 +204,6 @@ class Adjustments {
     if (!current_user_can('update_core')) {
       remove_action('admin_notices', 'update_nag', 3);
     }
-    // Remove tools page for all.
-    remove_menu_page('tools.php');
   }
 
   /**
