@@ -71,7 +71,7 @@ class Adjustments {
     // Remove all traces of emojicons.
     add_action('init', array($this, 'remove_emojicons'));
     // Tell Autoptimizer not to concat inline CSS/JavaScript.
-    add_filter('autoptimize_css_include_inline', '__retun_false');
+    add_filter('autoptimize_css_include_inline', '__return_false');
     add_filter('autoptimize_js_include_inline', '__return_false');
     // Activate Soil features.
     add_action('after_setup_theme', array($this, 'setup_soil'));
