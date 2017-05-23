@@ -71,8 +71,6 @@ class Adjustments {
   public function init_cleanup() {
     // Remove all traces of emojicons.
     add_action('init', array($this, 'remove_emojicons'));
-    // Activate Soil features.
-    add_action('after_setup_theme', array($this, 'setup_soil'));
     // Set and force some sane default options.
     add_action('wpmu_new_blog', array($this, 'set_default_options'));
     // Disable XML-RPC.
@@ -151,18 +149,6 @@ class Adjustments {
       }
       return array();
     });
-  }
-
-  /**
-   * Activate soil features in all front-end themes.
-   */
-  public function setup_soil() {
-    if (!is_admin()) {
-      add_theme_support('soil-clean-up');
-      add_theme_support('soil-nice-search');
-      add_theme_support('soil-jquery-cdn');
-      add_theme_support('soil-relative-urls');
-    }
   }
 
   /**
