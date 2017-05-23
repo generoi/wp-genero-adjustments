@@ -120,6 +120,9 @@ class Adjustments {
     add_action('customize_update_user_meta', array($this, 'customizer_update_user_meta'), 10, 2);
     // Action for saving author_meta settings used in above action.
     add_action('customize_register', array($this, 'customizer_add_author_meta'), 100);
+    // Remove nagging notices.
+    remove_action('admin_notices', 'woothemes_updater_notice');
+    remove_action('admin_notices', 'widgetopts_admin_notices');
   }
 
   /**
@@ -143,6 +146,7 @@ class Adjustments {
     remove_filter('wp_mail', 'wp_staticize_emoji_for_email');
     remove_filter('the_content_feed', 'wp_staticize_emoji');
     remove_filter('comment_text_rss', 'wp_staticize_emoji');
+    add_filter('emoji_svg_url', '__return_false');
     add_filter('tiny_mce_plugins', function ($plugins) {
       if (is_array($plugins)) {
         return array_diff($plugins, array('wpemoji'));
