@@ -48,6 +48,7 @@ class Adjustments {
     $this->init_cleanup();
     $this->init_shortcodes();
     $this->init_gravityform();
+    $this->init_autoptimize();
     $this->init_admin();
     $this->init_bugfixes();
   }
@@ -70,15 +71,22 @@ class Adjustments {
   public function init_cleanup() {
     // Remove all traces of emojicons.
     add_action('init', array($this, 'remove_emojicons'));
-    // Tell Autoptimizer not to concat inline CSS/JavaScript.
-    add_filter('autoptimize_css_include_inline', '__return_false');
-    add_filter('autoptimize_js_include_inline', '__return_false');
     // Activate Soil features.
     add_action('after_setup_theme', array($this, 'setup_soil'));
     // Set and force some sane default options.
     add_action('wpmu_new_blog', array($this, 'set_default_options'));
     // Disable XML-RPC.
     add_filter('xmlrpc_enabled', '__return_false');
+  }
+
+  public function init_autoptimize() {
+    // Tell Autoptimizer not to concat inline CSS/JavaScript.
+    add_filter('autoptimize_css_include_inline', '__return_false');
+    add_filter('autoptimize_js_include_inline', '__return_false');
+    // Disable Autoptimize for logged in users.
+    add_filter('autoptimize_filter_noptimize', array($this, 'should_disable_cache'));
+    // Remove Autoptimize from the admin toolbar.
+    add_filter('autoptimize_filter_toolbar_show', '__return_false');
   }
 
   /**
@@ -290,6 +298,13 @@ class Adjustments {
   */
   public function shortcode_shy($atts) {
     return '&shy;';
+  }
+
+  /**
+   * Return if caching should be disabled.
+   */
+  public function should_disable_cache() {
+    return WP_CACHE ? is_user_logged_in() : true;
   }
 
   /**
