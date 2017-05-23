@@ -128,8 +128,8 @@ class Adjustments {
   public function init_bugfixes() {
     // Fix for clear-cache-for-widgets.
     add_action('ccfm_clear_cache_for_me_before', array($this, 'fix_clear_cache_for_widgets'));
-    // Fix for wp-xhprof-profiler.
-    add_action('plugins_loaded', array($this, 'fix_xhprof_profiler'), 9);
+    // Fix for debug-bar-js.dev.js referencing jQuery without depending on it.
+    add_action('wp_print_scripts', array($this, 'fix_debug_bar_js'));
   }
 
   /**
@@ -160,15 +160,13 @@ class Adjustments {
   }
 
   /**
-   * Fix for wp-xhprof-profiler which corrupts AJAX/REST output.
+   * Fix debug-bar-js.dev.js referencing jQuery without depending on it.
    */
-  public function fix_xhprof_profiler() {
-    $is_ajax = defined('DOING_AJAX') && DOING_AJAX;
-    $is_customizer = is_customize_preview();
-
-    if ($is_ajax || $is_customizer) {
-      remove_action('plugins_loaded', 'berriart_xhprof_profiler_muplugins_loaded');
-      remove_action('shutdown', 'berriart_xhprof_profiler_shutdown');
+  public function fix_debug_bar_js() {
+    if (wp_script_is('debug-bar-js', 'enqueued')) {
+      wp_dequeue_script('debug-bar-js');
+      $suffix = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '.dev' : '';
+      wp_enqueue_script('debug-bar-js', plugins_url("js/debug-bar-js$suffix.js", WP_PLUGIN_DIR . '/debug-bar'), ['jquery'], '20111216', true);
     }
   }
 
