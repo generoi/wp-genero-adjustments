@@ -17,9 +17,9 @@ if (!is_blog_installed()) {
 }
 
 /** Remove WPML assets. */
-define('ICL_DONT_LOAD_NAVIGATION_CSS', true);
-define('ICL_DONT_LOAD_LANGUAGE_SELECTOR_CSS', true);
-define('ICL_DONT_LOAD_LANGUAGES_JS', true);
+defined('ICL_DONT_LOAD_NAVIGATION_CSS') || define('ICL_DONT_LOAD_NAVIGATION_CSS', true);
+defined('ICL_DONT_LOAD_LANGUAGE_SELECTOR_CSS') || define('ICL_DONT_LOAD_LANGUAGE_SELECTOR_CSS', true);
+defined('ICL_DONT_LOAD_LANGUAGES_JS') || define('ICL_DONT_LOAD_LANGUAGES_JS', true);
 
 class Adjustments {
 
