@@ -121,6 +121,8 @@ class Adjustments {
     add_action('customize_update_user_meta', array($this, 'customizer_update_user_meta'), 10, 2);
     // Action for saving author_meta settings used in above action.
     add_action('customize_register', array($this, 'customizer_add_author_meta'), 100);
+    // Hide some columns by default from the Admin UI screen options
+    add_filter('default_hidden_columns', array($this, 'default_hidden_columns'), 10, 2);
     // Remove nagging notices.
     remove_action('admin_notices', 'woothemes_updater_notice');
     remove_action('admin_notices', 'widgetopts_admin_notices');
@@ -133,7 +135,7 @@ class Adjustments {
     // Fix for clear-cache-for-widgets.
     add_action('ccfm_clear_cache_for_me_before', array($this, 'fix_clear_cache_for_widgets'));
     // Fix for debug-bar-js.dev.js referencing jQuery without depending on it.
-    add_action('wp_print_scripts', array($this, 'fix_debug_bar_js'));
+    add_action('wp_print_scripts', array($this, 'fix_debug_bar_js'), 999);
   }
 
   /**
@@ -166,6 +168,13 @@ class Adjustments {
       }
       return array();
     });
+    add_filter('wp_resource_hints', function ($hints, $relation_type) {
+        if ($relation_type == 'dns-prefetch') {
+            $emoji_svg_url = apply_filters('emoji_svg_url', 'https://s.w.org/images/core/emoji/2.2.1/svg/');
+            $hints = array_diff($hints, [$emoji_svg_url]);
+        }
+        return $hints;
+    }, 10, 2);
   }
 
   /**
@@ -275,6 +284,19 @@ class Adjustments {
         'section' => 'author',
       ));
     }
+  }
+
+  /**
+   * Hide some columns by default from the Admin UI screen options.
+   */
+  public function default_hidden_columns($hidden, $screen) {
+    if (!empty($screen->taxonomy)) {
+        $hidden[] = 'description';
+    }
+    if (!empty($screen->post_type) && $screen->post_type == 'post') {
+        $hidden[] = 'tags';
+    }
+    return $hidden;
   }
 
   /**
