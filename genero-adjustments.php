@@ -51,6 +51,7 @@ class Adjustments {
     $this->init_autoptimize();
     $this->init_admin();
     $this->init_bugfixes();
+    $this->init_polylang();
   }
 
   /**
@@ -133,6 +134,18 @@ class Adjustments {
     add_action('ccfm_clear_cache_for_me_before', array($this, 'fix_clear_cache_for_widgets'));
     // Fix for debug-bar-js.dev.js referencing jQuery without depending on it.
     add_action('wp_print_scripts', array($this, 'fix_debug_bar_js'));
+  }
+
+  /**
+   * Polylang integrations.
+   */
+  public function init_polylang() {
+    add_filter('acf/settings/default_language', function ($language) {
+        return function_exists('pll') ? pll_default_language() : $language;
+    });
+    add_filter('acf/settings/current_language', function ($language) {
+        return function_exists('pll') ? pll_current_language() : $language;
+    });
   }
 
   /**
