@@ -123,6 +123,7 @@ class Adjustments {
     add_action('customize_register', array($this, 'customizer_add_author_meta'), 100);
     // Hide some columns by default from the Admin UI screen options
     add_filter('default_hidden_columns', array($this, 'default_hidden_columns'), 10, 2);
+    add_action('wp_before_admin_bar_render', array($this, 'remove_admin_bar_items'));
     // Remove nagging notices.
     remove_action('admin_notices', 'woothemes_updater_notice');
     remove_action('admin_notices', 'widgetopts_admin_notices');
@@ -296,7 +297,18 @@ class Adjustments {
     if (!empty($screen->post_type) && $screen->post_type == 'post') {
         $hidden[] = 'tags';
     }
+    $hidden[] = 'wpseo-score';
+    $hidden[] = 'wpseo-score-readability';
     return $hidden;
+  }
+
+  /**
+   * Remove items from the admin bar.
+   */
+  public function remove_admin_bar_items() {
+    global $wp_admin_bar;
+    // Yoast
+    $wp_admin_bar->remove_menu('wpseo-menu');
   }
 
   /**
