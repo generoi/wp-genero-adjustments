@@ -137,6 +137,9 @@ class Adjustments {
     add_action('ccfm_clear_cache_for_me_before', array($this, 'fix_clear_cache_for_widgets'));
     // Fix for debug-bar-js.dev.js referencing jQuery without depending on it.
     add_action('wp_print_scripts', array($this, 'fix_debug_bar_js'), 999);
+    // Fix Simple Custom Post Order not clearing object caches.
+    add_action('wp_ajax_update-menu-order', array($this, 'fix_scp_order_post_cache'), 11);
+    add_action('wp_ajax_update-menu-order-tags', array($this, 'fix_scp_order_term_cache'), 11);
   }
 
   /**
@@ -194,6 +197,43 @@ class Adjustments {
       wp_dequeue_script('debug-bar-js');
       $suffix = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '.dev' : '';
       wp_enqueue_script('debug-bar-js', plugins_url("js/debug-bar-js$suffix.js", WP_PLUGIN_DIR . '/debug-bar'), ['jquery'], '20111216', true);
+    }
+  }
+
+  /**
+   * Fix Simple Custom Post Order plugin not clearing the object cache.
+   */
+  public function fix_scp_order_post_cache() {
+    parse_str($_POST['order'], $data);
+    if (!is_array($data)) {
+      return false;
+    }
+
+    foreach ($data as $key => $values) {
+      foreach ($values as $position => $id) {
+        clean_post_cache($id);
+      }
+    }
+  }
+
+  /**
+   * Fix Simple Custom Post Order plugin not clearing the object cache.
+   */
+  public function fix_scp_order_term_cache() {
+    parse_str($_POST['order'], $data);
+    if (!is_array($data)) {
+      return false;
+    }
+
+    $ids = [];
+    foreach ($data as $key => $values) {
+      foreach ($values as $position => $id) {
+        $ids[] = $id;
+      }
+    }
+
+    if (!empty($ids)) {
+      clean_term_cache($ids, '', false);
     }
   }
 
