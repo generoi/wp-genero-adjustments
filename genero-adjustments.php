@@ -140,6 +140,8 @@ class Adjustments {
     // Fix Simple Custom Post Order not clearing object caches.
     add_action('wp_ajax_update-menu-order', array($this, 'fix_scp_order_post_cache'), 11);
     add_action('wp_ajax_update-menu-order-tags', array($this, 'fix_scp_order_term_cache'), 11);
+    // Fix for WPSC constantly writing to wp-cache-config.php which is read-only.
+    remove_action('gc_cache', 'wpsc_timestamp_cache_update', 10, 2);
   }
 
   /**
