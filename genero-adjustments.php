@@ -141,7 +141,7 @@ class Adjustments {
     add_action('wp_ajax_update-menu-order', array($this, 'fix_scp_order_post_cache'), 11);
     add_action('wp_ajax_update-menu-order-tags', array($this, 'fix_scp_order_term_cache'), 11);
     // Fix for WPSC constantly writing to wp-cache-config.php which is read-only.
-    remove_action('gc_cache', 'wpsc_timestamp_cache_update', 10, 2);
+    add_action('plugins_loaded', array($this, 'fix_wpsc_155'));
   }
 
   /**
@@ -237,6 +237,13 @@ class Adjustments {
     if (!empty($ids)) {
       clean_term_cache($ids, '', false);
     }
+  }
+
+  /**
+   * @see https://github.com/Automattic/wp-super-cache/issues/397
+   */
+  public function fix_wpsc_155() {
+    remove_action('gc_cache', 'wpsc_timestamp_cache_update', 10, 2);
   }
 
   /**
