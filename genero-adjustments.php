@@ -3,7 +3,7 @@
 Plugin Name:        Genero Adjustments
 Plugin URI:         http://genero.fi
 Description:        A collection of minor fixes across all sites.
-Version:            1.0.8
+Version:            1.0.9
 Author:             Genero
 Author URI:         http://genero.fi/
 License:            MIT License
@@ -52,7 +52,7 @@ class Adjustments {
    * Register setup
    */
   public function __construct() {
-    register_activation_hook(__FILE__, [__CLASS__, 'install']);
+    register_activation_hook(__FILE__, [$this, 'install']);
     Puc_v4_Factory::buildUpdateChecker($this->github_url, __FILE__, $this->plugin_name);
     add_action('plugins_loaded', [$this, 'init']);
   }
