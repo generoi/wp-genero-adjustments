@@ -3,7 +3,7 @@
 Plugin Name:        Genero Adjustments
 Plugin URI:         http://genero.fi
 Description:        A collection of minor fixes across all sites.
-Version:            0.0.1
+Version:            1.0.6
 Author:             Genero
 Author URI:         http://genero.fi/
 License:            MIT License
@@ -26,6 +26,11 @@ class Adjustments {
   /** Singleton instance */
   private static $instance = null;
 
+  /** Plugin name used by plugin-update-checker */
+  public $plugin_name = 'wp-plugin-boilerplate';
+  /** Plugin github url used by plugin-update-checker */
+  public $github_url = 'https://github.com/generoi/wp-genero-adjustments';
+
   /** Additional role capabilities */
   public static $role_capabilities = array(
     'editor' => array('edit_theme_options'),
@@ -39,6 +44,15 @@ class Adjustments {
       self::$instance = new self();
     }
     return self::$instance;
+  }
+
+  /**
+   * Register setup
+   */
+  public function __construct() {
+    register_activation_hook(__FILE__, [__CLASS__, 'install']);
+    Puc_v4_Factory::buildUpdateChecker($this->github_url, __FILE__, $this->plugin_name);
+    add_action('plugins_loaded', [$this, 'init']);
   }
 
   /**
@@ -453,5 +467,8 @@ class Adjustments {
   }
 }
 
-register_activation_hook(__FILE__, array(Adjustments::get_instance(), 'install'));
-Adjustments::get_instance()->init();
+if (file_exists($composer = __DIR__ . '/vendor/autoload.php')) {
+    require_once $composer;
+}
+
+Adjustments::get_instance();
