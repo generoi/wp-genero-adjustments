@@ -3,7 +3,7 @@
 Plugin Name:        Genero Adjustments
 Plugin URI:         http://genero.fi
 Description:        A collection of minor fixes across all sites.
-Version:            1.0.7
+Version:            1.0.8
 Author:             Genero
 Author URI:         http://genero.fi/
 License:            MIT License
@@ -11,6 +11,8 @@ License URI:        http://opensource.org/licenses/MIT
 */
 
 namespace Genero;
+
+use Puc_v4_Factory;
 
 if (!is_blog_installed()) {
   return;
