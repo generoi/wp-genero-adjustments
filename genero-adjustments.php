@@ -166,10 +166,10 @@ class Adjustments {
   public function init_polylang() {
     add_filter('acf/settings/default_language', function ($language) {
         return function_exists('pll') ? pll_default_language() : $language;
-    });
+    }, 9);
     add_filter('acf/settings/current_language', function ($language) {
         return function_exists('pll') ? pll_current_language() : $language;
-    });
+    }, 9);
   }
 
   /**
