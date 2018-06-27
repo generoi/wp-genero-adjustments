@@ -431,7 +431,7 @@ class Adjustments {
     // Disable avatars as they add unnecssary assets to the front-end.
     update_option('show_avatars', 0);
     // Other sane defaults.
-    update_option('uploads_use_yearmonth_folders', 0);
+    update_option('uploads_use_yearmonth_folders', 1);
     update_option('permalink_structure', '/%postname%/');
     update_option('gmt_offset', '+3');
     update_option('default_comment_status', 'closed');
