@@ -468,6 +468,8 @@ class Adjustments {
     update_option('gform_enable_noconflict', 0);
     update_option('rg_gforms_enable_akismet', 1);
     update_option('rg_gforms_enable_html5', 1);
+    update_option('rg_gforms_disable_css', 1);
+    update_option('gform_enable_background_updates', 0);
     update_option('rg_gforms_currency', 'EUR');
 
     if (isset($blog_id)) {
