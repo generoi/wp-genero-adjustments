@@ -435,7 +435,8 @@ class Adjustments {
     update_option('permalink_structure', '/%postname%/');
     update_option('gmt_offset', '+3');
     update_option('default_comment_status', 'closed');
-    update_option('time_format', 'g:i');
+    update_option('timezone_string', 'Europe/Helsinki');
+    update_option('time_format', 'H:i');
     update_option('autoptimize_html', 'on');
     update_option('autoptimize_js', 'on');
     update_option('autoptimize_css', 'on');
