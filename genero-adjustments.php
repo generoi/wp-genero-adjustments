@@ -68,6 +68,7 @@ class Adjustments {
     $this->init_admin();
     $this->init_bugfixes();
     $this->init_polylang();
+    $this->init_seoframework();
   }
 
   /**
@@ -170,6 +171,18 @@ class Adjustments {
     add_filter('acf/settings/current_language', function ($language) {
         return function_exists('pll') ? pll_current_language() : $language;
     }, 9);
+  }
+
+  /**
+   * SEO Framework integrations.
+   */
+  public function init_seoframework() {
+    // Disable SEO for post types without title and editor.
+    add_filter('the_seo_framework_custom_post_type_support', function () {
+        return ['title', 'editor'];
+    });
+    // Disable the SEO Bar columns on the post/page/taxonomy selection screens.
+    add_filter('the_seo_framework_show_seo_column', '__return_false');
   }
 
   /**
